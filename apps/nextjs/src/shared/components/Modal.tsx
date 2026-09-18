@@ -40,7 +40,10 @@ export function Modal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-2 sm:p-4">
+    // Leaflet's own panes and zoom controls use z-index values up to ~1000 (see
+    // leaflet.css), so a modal opened over a map — the admin map's create/edit
+    // dialogs — needs to clear that, not just Tailwind's usual z-50 stacking.
+    <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/40 p-2 sm:p-4">
       <div
         role="dialog"
         aria-modal="true"

@@ -118,6 +118,18 @@ describe("KaartClient (admin)", () => {
     expect(screen.getByTestId("edit-modal-stub").textContent).toBe("Punt 1");
   });
 
+  it("disables click-to-create on the map while a pin is already open for editing", () => {
+    const locations = [location({ id: 1 })];
+
+    render(<KaartClient locations={locations} />);
+
+    expect(screen.getByRole("button", { name: "Klik oop plek (toets)" })).toBeTruthy();
+
+    fireEvent.click(screen.getByRole("button", { name: "Wysig ligging (toets)" }));
+
+    expect(screen.queryByRole("button", { name: "Klik oop plek (toets)" })).toBeNull();
+  });
+
   it("opens the create modal with the clicked coordinates when empty map space is clicked", () => {
     render(<KaartClient locations={[location({ id: 1 })]} />);
 
@@ -126,5 +138,6 @@ describe("KaartClient (admin)", () => {
     fireEvent.click(screen.getByRole("button", { name: "Klik oop plek (toets)" }));
 
     expect(screen.getByTestId("create-modal-stub").textContent).toBe("-25.7,28.1");
+    expect(screen.queryByRole("button", { name: "Klik oop plek (toets)" })).toBeNull();
   });
 });

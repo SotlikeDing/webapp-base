@@ -57,7 +57,18 @@ export function KaartClient({ locations }: { locations: PublicLocation[] }) {
       </p>
 
       <div className="h-[60vh] min-h-80 overflow-hidden rounded-lg border border-(--panel-border) sm:h-[70vh]">
-        <MapView locations={visibleLocations} onEdit={setEditingPin} onCreate={(lat, lng) => setCreatingAt({ lat, lng })} />
+        <MapView
+          locations={visibleLocations}
+          onEdit={setEditingPin}
+          // Disabled while a pin is already open for editing or creation — a stray
+          // click meant for that dialog (or its own mini map picker) must never also
+          // register as "start a new pin" on the map underneath it.
+          onCreate={
+            editingPin === null && creatingAt === null
+              ? (lat, lng) => setCreatingAt({ lat, lng })
+              : undefined
+          }
+        />
       </div>
 
       <LocationEditModal pin={editingPin} onClose={() => setEditingPin(null)} />

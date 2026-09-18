@@ -97,7 +97,11 @@ export function CreatePinModal({
         body: null,
         assetType: input.assetType,
         assetReference: input.assetReference,
-        publishedAt: null,
+        // A pin created from the map is meant to be visible immediately — the API
+        // only ever includes a location in the public feed when its content has a
+        // past PublishedAt (LocationDetailRepository.cs), so leaving this null would
+        // create an invisible draft.
+        publishedAt: new Date().toISOString(),
         unpublishedAt: null,
         eventStart: null,
         eventEnd: null,
